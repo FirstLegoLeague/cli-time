@@ -49,13 +49,11 @@ if (interval === true) {
 var pattern;
 
 if (interval && (pattern = interval.match(/(\d*)([a-z]+)/))) {
-    // console.log(pattern);
     var value = parseInt(pattern[1],10)||1;
     var unit = pattern[2];
     value = value * (units[unit]||units.s);
     var now = Date.now();
     var rest = value - (now % value);
-    console.log(now,rest,value);
     tickAfter(value,mask,rest);
 }
 
@@ -63,7 +61,7 @@ function tickAfter(timeout,mask,wait) {
     setTimeout(function() {
         var now = Date.now();
         var rest = timeout - (now % timeout);
-        console.log(dateFormat(now,mask,utc,gmt),now,rest);
+        console.log(dateFormat(now,mask,utc,gmt));
         tickAfter(timeout,mask,rest);
     },wait);
 }
