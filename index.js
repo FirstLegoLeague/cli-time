@@ -4,25 +4,19 @@ var meow = require('./node_modules/dateformat/node_modules/meow');
 var cli = meow({
   pkg: 'package.json',
   help: [
-    // 'Options',
-    // '  --help          Show this help',
-    // '  --version       Current version of package',
-    // '  -d | --date     Date that want to format (Date object as Number or String)',
-    // '  -m | --mask     Mask that will use to format the date',
-    // '  -u | --utc      Convert local time to UTC time or use `UTC:` prefix in mask',
-    // '  -g | --gmt      You can use `GMT:` prefix in mask',
-    // '',
-    // 'Usage',
-    // '  dateformat [date] [mask]',
-    // '  dateformat "Nov 26 2014" "fullDate"',
-    // '  dateformat 1416985417095 "dddd, mmmm dS, yyyy, h:MM:ss TT"',
-    // '  dateformat 1315361943159 "W"',
-    // '  dateformat "UTC:h:MM:ss TT Z"',
-    // '  dateformat "longTime" true',
-    // '  dateformat "longTime" false true',
-    // '  dateformat "Jun 9 2007" "fullDate" true',
-    // '  date +%s | dateformat',
-    // ''
+    'Options',
+    '  --help          Show this help',
+    '  --version       Current version of package',
+    '  -m | --mask     Mask that will use to format the date',
+    '  -i | --interval Interval to tick, defaults to 1s, should be of the format [<value>](s[ec[ond[s]]]|m[in[ute[s]]]|h[r[s]]|hour[s])',
+    '  -u | --utc      Convert local time to UTC time or use `UTC:` prefix in mask',
+    '  -g | --gmt      You can use `GMT:` prefix in mask',
+    '',
+    'Usage',
+    '  time -m "HH:MM:ss" -i 1s',
+    '  time -m "json" -i',
+    '  time -m "longTime" -i 1m',
+    ''
   ].join('\n')
 });
 
@@ -42,29 +36,34 @@ var units = {
     hours: 360000
 };
 
-var mask = cli.input[1] || cli.flags.m || cli.flags.mask || dateFormat.masks.default;
-var tick = cli.flags.t || cli.flags.tick || false;
-if (tick === true) {
-    tick = '1s';
+//json output, eg: {"time":"2015-04-29T23:10:00+0200"}
+dateFormat.masks.json = '\'{"time":"\'yyyy-mm-dd\'T\'HH:MM:sso\'"}\'';
+
+var mask = cli.flags.m || cli.flags.mask || dateFormat.masks.default;
+var utc = cli.flags.u || cli.flags.utc || false;
+var gmt = cli.flags.g || cli.flags.gmt || false;
+var interval = cli.flags.i || cli.flags.interval || false;
+if (interval === true) {
+    interval = '1s';
 }
 var pattern;
 
-if (tick && (pattern = tick.match(/(\d*)([a-z]+)/))) {
+if (interval && (pattern = interval.match(/(\d*)([a-z]+)/))) {
     // console.log(pattern);
     var value = parseInt(pattern[1],10)||1;
     var unit = pattern[2];
     value = value * (units[unit]||units.s);
-
-    tock(value,mask);
+    var now = Date.now();
+    var rest = value - (now % value);
+    console.log(now,rest,value);
+    tickAfter(value,mask,rest);
 }
 
-function tock(timeout,mask) {
-    var date = Date.now();
-    console.log(dateFormat(date,mask));
+function tickAfter(timeout,mask,wait) {
     setTimeout(function() {
-        tock(timeout,mask);
-    },timeout);
+        var now = Date.now();
+        var rest = timeout - (now % timeout);
+        console.log(dateFormat(now,mask,utc,gmt),now,rest);
+        tickAfter(timeout,mask,rest);
+    },wait);
 }
-
-
-// console.log(dateformat,cli.input);
