@@ -61,7 +61,7 @@ function tickAfter(timeout,mask,wait) {
     setTimeout(function() {
         var now = Date.now();
         var rest = timeout - (now % timeout);
-        console.log(dateFormat(now,mask,utc,gmt));
         tickAfter(timeout,mask,rest);
+        console.log(dateFormat(now,mask,utc,gmt));
     },wait);
 }
