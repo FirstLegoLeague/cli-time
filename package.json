@@ -9,8 +9,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": {
+    "name": "Rikkert Koppes",
+    "email": "rikkert@rikkertkoppes.com"
+  },
   "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FirstLegoLeague/cli-time"
+  },
   "dependencies": {
     "dateformat": "~1.0.11",
     "meow": "~3.1.0"
