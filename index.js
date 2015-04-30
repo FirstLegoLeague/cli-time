@@ -1,5 +1,5 @@
 var dateFormat = require('dateformat');
-var meow = require('./node_modules/dateformat/node_modules/meow');
+var meow = require('meow');
 
 var cli = meow({
   pkg: 'package.json',
