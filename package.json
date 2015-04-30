@@ -1,8 +1,11 @@
 {
-  "name": "time",
+  "name": "cli-time",
   "version": "0.1.0",
-  "description": "ticking clock, reports a time every specified interval",
+  "description": "ticking clock, reports a time every specified interval in desired format",
   "main": "index.js",
+  "bin": {
+    "cli-time": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var dateFormat = require('dateformat');
 var meow = require('meow');
 
